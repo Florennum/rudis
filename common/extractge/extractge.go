@@ -1,59 +1,56 @@
 package extractge
 
 import (
-	"archive/zip"
 	"fmt"
-	"io"
 	"os"
+	"os/exec"
 	"os/user"
 	"path/filepath"
 
 	"github.com/Florennum/rudis/common/fetchtag"
 )
 
-func ExtractGEArchive() error {
+func ExtractGE() {
 	tag, err := fetchtag.FetchTag()
 	if err != nil {
-		return err
+		fmt.Println("Error:", err)
+		return
 	}
 
 	currentUser, err := user.Current()
 	if err != nil {
-		return err
+		fmt.Println("Error:", err)
+		return
 	}
 
 	// Define the target directory for extraction
-	targetDir := filepath.Join(currentUser.HomeDir, ".local", "share", "rudis", "winege-ext")
+	targetDir := filepath.Join(currentUser.HomeDir, ".local", "share", "rudis", "winege-arch")
 	archivePath := filepath.Join(targetDir, fmt.Sprintf("wine-lutris-%s-x86_64.tar.xz", tag))
 
-	// Open the ZIP archive
-	r, err := zip.OpenReader(archivePath)
-	if err != nil {
-		return err
-	}
-	defer r.Close()
+	// Define the output directory
+	outputDir := filepath.Join(currentUser.HomeDir, ".local", "share", "rudis", "winege-ext")
 
-	// Extract files from the ZIP archive
-	for _, f := range r.File {
-		rc, err := f.Open()
-		if err != nil {
-			return err
-		}
-		defer rc.Close()
-
-		// Create the output file
-		outputFile, err := os.Create(filepath.Join(targetDir, f.Name))
-		if err != nil {
-			return err
-		}
-		defer outputFile.Close()
-
-		// Copy the contents to the output file
-		_, err = io.Copy(outputFile, rc)
-		if err != nil {
-			return err
-		}
+	// Check if the output directory exists
+	_, outputDirErr := os.Stat(outputDir)
+	if outputDirErr == nil {
+		fmt.Println("Archive is already extracted in:", outputDir)
+		return
 	}
 
-	return nil
+	// Create the output directory
+	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
+		fmt.Println("Error creating output directory:", err)
+		return
+	}
+
+	cmd := exec.Command("sh", "-c", fmt.Sprintf("pv %s | tar -xJf - -C %s", archivePath, outputDir))
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	if err := cmd.Run(); err != nil {
+		fmt.Println("Error extracting archive:", err)
+		return
+	}
+
+	fmt.Println("Archive extracted successfully to:", outputDir)
 }
