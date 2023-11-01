@@ -1,4 +1,4 @@
-package vsetge
+package setge
 
 import (
 	"fmt"
