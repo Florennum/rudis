@@ -11,7 +11,7 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: myprogram [command]")
+		fmt.Println("Usage: rudis [command]")
 		return
 	}
 
