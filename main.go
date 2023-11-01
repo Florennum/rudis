@@ -22,7 +22,7 @@ func main() {
 		fmt.Println("Installing GE...")
 		mkdir.Mkdir()
 		downloadge.Downloadge()
-		extractge.ExtractGEArchive()
+		extractge.ExtractGE()
 
 	case "update":
 		fmt.Println("Updating something...")
