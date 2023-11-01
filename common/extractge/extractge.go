@@ -1,4 +1,4 @@
-package downloadge
+package extractge
 
 import (
 	"archive/zip"
