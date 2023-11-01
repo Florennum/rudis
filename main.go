@@ -7,12 +7,13 @@ import (
 	"github.com/Florennum/rudis/common/downloadge"
 	"github.com/Florennum/rudis/common/extractge"
 	"github.com/Florennum/rudis/common/mkdir"
+	"github.com/Florennum/rudis/common/patchflatpak"
 	"github.com/Florennum/rudis/common/setge"
 )
 
 func main() {
 	vinegar := flag.Bool("vinegar", false, "vinegar")
-	// fvinegar := flag.Bool("f-vinegar", false, "flatpak vinegar")
+	fvinegar := flag.Bool("f-vinegar", false, "flatpak vinegar")
 	flag.Parse()
 
 	if flag.NArg() < 1 {
@@ -28,8 +29,13 @@ func main() {
 		mkdir.Mkdir()
 		downloadge.Downloadge()
 		extractge.ExtractGE()
+
 		if *vinegar {
 			setge.Vsetge()
+		}
+		if *fvinegar {
+			patchflatpak.Patch()
+			setge.FVsetge()
 		}
 
 	case "update":
