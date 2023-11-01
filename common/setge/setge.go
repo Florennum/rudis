@@ -1,4 +1,4 @@
-package main
+package vsetge
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	tomlv2 "github.com/pelletier/go-toml/v2"
 )
 
-func main() {
+func Vsetge() {
 	// Get the current user's home directory
 	currentUser, err := user.Current()
 	if err != nil {
