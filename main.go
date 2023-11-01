@@ -7,6 +7,7 @@ import (
 	"github.com/Florennum/rudis/common/downloadge"
 	"github.com/Florennum/rudis/common/extractge"
 	"github.com/Florennum/rudis/common/mkdir"
+	"github.com/Florennum/rudis/common/setge"
 )
 
 func main() {
@@ -23,6 +24,7 @@ func main() {
 		mkdir.Mkdir()
 		downloadge.Downloadge()
 		extractge.ExtractGE()
+		setge.Vsetge()
 
 	case "update":
 		fmt.Println("Updating something...")
