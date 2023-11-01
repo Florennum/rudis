@@ -6,7 +6,6 @@ import (
 	"github.com/google/go-github/github"
 )
 
-// FetchTag returns the latest tag from the specified GitHub repository.
 func FetchTag() (string, error) {
 	ctx := context.Background()
 
