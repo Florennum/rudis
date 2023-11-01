@@ -14,6 +14,8 @@ import (
 func main() {
 	vinegar := flag.Bool("vinegar", false, "vinegar")
 	fvinegar := flag.Bool("f-vinegar", false, "flatpak vinegar")
+	grapejuice := flag.Bool("grapejuice", false, "grapejuice")
+	fgrapejuice := flag.Bool("f-grapejuice", false, "flatpak grapejuice")
 	flag.Parse()
 
 	if flag.NArg() < 1 {
@@ -36,6 +38,13 @@ func main() {
 		if *fvinegar {
 			patchflatpak.Patch()
 			setge.FVsetge()
+		}
+		if *grapejuice {
+			setge.GJsetge()
+		}
+		if *fgrapejuice {
+			patchflatpak.Patch()
+			setge.FGJsetge()
 		}
 
 	case "update":
