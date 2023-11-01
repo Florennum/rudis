@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/Florennum/rudis/common/downloadge"
+	"github.com/Florennum/rudis/common/extractge"
 	"github.com/Florennum/rudis/common/mkdir"
 )
 
@@ -21,6 +22,7 @@ func main() {
 		fmt.Println("Installing GE...")
 		mkdir.Mkdir()
 		downloadge.Downloadge()
+		extractge.ExtractGEArchive()
 
 	case "update":
 		fmt.Println("Updating something...")
