@@ -1,8 +1,8 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"os"
 
 	"github.com/Florennum/rudis/common/downloadge"
 	"github.com/Florennum/rudis/common/extractge"
@@ -11,12 +11,16 @@ import (
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: rudis [command]")
+	vinegar := flag.Bool("vinegar", false, "vinegar")
+	// fvinegar := flag.Bool("f-vinegar", false, "flatpak vinegar")
+	flag.Parse()
+
+	if flag.NArg() < 1 {
+		fmt.Println("Usage: rudis [flag] [command]")
 		return
 	}
 
-	command := os.Args[1]
+	command := flag.Arg(0)
 
 	switch command {
 	case "install-ge":
@@ -24,11 +28,12 @@ func main() {
 		mkdir.Mkdir()
 		downloadge.Downloadge()
 		extractge.ExtractGE()
-		setge.Vsetge()
+		if *vinegar {
+			setge.Vsetge()
+		}
 
 	case "update":
 		fmt.Println("Updating something...")
-		// Call a function to perform an update.
 
 	default:
 		fmt.Println("Unknown command:", command)
