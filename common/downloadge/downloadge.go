@@ -29,6 +29,7 @@ func Downloadge() error {
 	// Check if the file already exists
 	if _, fileErr := os.Stat(outputFile); fileErr == nil {
 		fmt.Printf("Archive already downloaded: %s\n", outputFile)
+		return nil
 	}
 
 	// Build the download URL
