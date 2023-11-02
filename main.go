@@ -8,7 +8,8 @@ import (
 	"github.com/Florennum/rudis/common/extractge"
 	"github.com/Florennum/rudis/common/mkdir"
 	"github.com/Florennum/rudis/common/patchflatpak"
-	"github.com/Florennum/rudis/common/setge"
+	"github.com/Florennum/rudis/common/setge/gjsetge"
+	"github.com/Florennum/rudis/common/setge/vsetge"
 )
 
 func main() {
@@ -33,18 +34,18 @@ func main() {
 		extractge.ExtractGE()
 
 		if *vinegar {
-			setge.Vsetge()
+			vsetge.Setge()
 		}
 		if *fvinegar {
 			patchflatpak.Patch()
-			setge.FVsetge()
+			vsetge.Fsetge()
 		}
 		if *grapejuice {
-			setge.GJsetge()
+			gjsetge.Setge()
 		}
 		if *fgrapejuice {
 			patchflatpak.Patch()
-			setge.FGJsetge()
+			gjsetge.Fsetge()
 		}
 
 	case "update":
