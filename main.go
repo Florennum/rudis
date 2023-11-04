@@ -8,7 +8,10 @@ import (
 	"github.com/Florennum/rudis/common/extractge"
 	"github.com/Florennum/rudis/common/mkdir"
 	"github.com/Florennum/rudis/common/patchflatpak"
-	"github.com/Florennum/rudis/common/setge/vsetge"
+	"github.com/Florennum/rudis/common/setge/grapejuice/fgjsetge"
+	"github.com/Florennum/rudis/common/setge/grapejuice/gjsetge"
+	"github.com/Florennum/rudis/common/setge/vinegar/fvsetge"
+	"github.com/Florennum/rudis/common/setge/vinegar/vsetge"
 )
 
 func main() {
@@ -42,14 +45,8 @@ func main() {
 
 func installGE(vinegar, fvinegar, grapejuice, fgrapejuice bool) {
 	fmt.Println("Installing GE...")
-
-	// Create a directory
 	mkdir.Mkdir()
-
-	// Download files
 	downloadge.Downloadge()
-
-	// Extract files from an archive
 	extractge.ExtractGE()
 
 	if vinegar {
@@ -57,14 +54,14 @@ func installGE(vinegar, fvinegar, grapejuice, fgrapejuice bool) {
 	}
 	if fvinegar {
 		patchflatpak.Patch()
-		vsetge.Fset()
+		fvsetge.Fset()
 	}
 	if grapejuice {
-		// setge.GJsetge()
+		gjsetge.Set()
 	}
 	if fgrapejuice {
 		patchflatpak.Patch()
-		// setge.FGJsetge()
+		fgjsetge.Set()
 	}
 }
 
