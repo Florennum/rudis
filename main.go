@@ -9,6 +9,8 @@ import (
 	"github.com/Florennum/rudis/common/extractge"
 	"github.com/Florennum/rudis/common/mkdir"
 	"github.com/Florennum/rudis/common/patchflatpak"
+	"github.com/Florennum/rudis/common/patchwayland/fvpatchwayland"
+	"github.com/Florennum/rudis/common/patchwayland/vpatchwayland"
 	"github.com/Florennum/rudis/common/setge/grapejuice/fgjsetge"
 	"github.com/Florennum/rudis/common/setge/grapejuice/gjsetge"
 	"github.com/Florennum/rudis/common/setge/vinegar/fvsetge"
@@ -39,7 +41,8 @@ func main() {
 
 	case "update":
 		update.UpdateRudis()
-
+	case "patch-wayland":
+		patchwayland(*vinegar, *fvinegar, *grapejuice, *fgrapejuice)
 	default:
 		fmt.Println("Unknown command:", command)
 	}
@@ -64,5 +67,17 @@ func installGE(vinegar, fvinegar, grapejuice, fgrapejuice bool) {
 	if fgrapejuice {
 		patchflatpak.Patch()
 		fgjsetge.Set()
+	}
+}
+
+func patchwayland(vinegar, fvinegar, grapejuice, fgrapejuice bool) {
+	fmt.Println("ah boy here we go again")
+
+	if vinegar {
+		vpatchwayland.UpdateLauncher()
+	}
+
+	if fvinegar {
+		fvpatchwayland.UpdateLauncher()
 	}
 }
