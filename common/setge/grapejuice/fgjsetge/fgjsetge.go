@@ -25,7 +25,6 @@ func Set() {
 		log.Fatal(err)
 	}
 
-	// Replace %s with the tag in the paths
 	defaultWineHome := fmt.Sprintf("%s/.local/share/rudis/winege-ext/lutris-%s-x86_64/", homeDir, tag)
 	wineHome := fmt.Sprintf("%s/.local/share/rudis/winege-ext/lutris-%s-x86_64/", homeDir, tag)
 
