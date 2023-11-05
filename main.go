@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 
+	"github.com/Florennum/rudis/common/dependcheck"
 	"github.com/Florennum/rudis/common/downloadge"
 	"github.com/Florennum/rudis/common/extractge"
 	"github.com/Florennum/rudis/common/mkdir"
@@ -15,7 +16,7 @@ import (
 )
 
 func main() {
-	// Define command-line flags
+	dependcheck.Check()
 	vinegar := flag.Bool("vinegar", false, "vinegar")
 	fvinegar := flag.Bool("f-vinegar", false, "flatpak vinegar")
 	grapejuice := flag.Bool("grapejuice", false, "grapejuice")
