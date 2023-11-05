@@ -7,6 +7,7 @@ import (
 	"github.com/Florennum/rudis/common/dependcheck"
 	"github.com/Florennum/rudis/common/downloadge"
 	"github.com/Florennum/rudis/common/extractge"
+	"github.com/Florennum/rudis/common/help"
 	"github.com/Florennum/rudis/common/mkdir"
 	"github.com/Florennum/rudis/common/patchflatpak"
 	"github.com/Florennum/rudis/common/patchwayland/fvpatchwayland"
@@ -43,8 +44,10 @@ func main() {
 		update.UpdateRudis()
 	case "patch-wayland":
 		patchwayland(*vinegar, *fvinegar, *grapejuice, *fgrapejuice)
+	case "help":
+		help.Help()
 	default:
-		fmt.Println("Unknown command:", command)
+		fmt.Println("Unknown command, use ./rudis help for help")
 	}
 }
 
