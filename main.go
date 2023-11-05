@@ -13,6 +13,7 @@ import (
 	"github.com/Florennum/rudis/common/setge/grapejuice/gjsetge"
 	"github.com/Florennum/rudis/common/setge/vinegar/fvsetge"
 	"github.com/Florennum/rudis/common/setge/vinegar/vsetge"
+	"github.com/Florennum/rudis/common/update"
 )
 
 func main() {
@@ -37,7 +38,7 @@ func main() {
 		installGE(*vinegar, *fvinegar, *grapejuice, *fgrapejuice)
 
 	case "update":
-		updateSomething()
+		update.UpdateRudis()
 
 	default:
 		fmt.Println("Unknown command:", command)
@@ -64,8 +65,4 @@ func installGE(vinegar, fvinegar, grapejuice, fgrapejuice bool) {
 		patchflatpak.Patch()
 		fgjsetge.Set()
 	}
-}
-
-func updateSomething() {
-	fmt.Println("Updating something...")
 }
