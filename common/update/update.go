@@ -15,10 +15,10 @@ func UpdateRudis() {
 		return
 	}
 
-	currentTag := "v1.1.0-alpha"
+	currentTag := "v1.1.1-alpha"
 
 	if latestTag != currentTag {
-		fmt.Printf("Updating 'rudis' to version %s...\n", latestTag)
+		fmt.Printf("Updating rudis to version %s...\n", latestTag)
 
 		projectPath := "./"
 		err := os.Chdir(projectPath)
