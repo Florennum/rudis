@@ -3,30 +3,18 @@ package main
 import (
 	"flag"
 	"fmt"
-
-	"github.com/Florennum/rudis/common/dependcheck"
-	"github.com/Florennum/rudis/common/downloadge"
-	"github.com/Florennum/rudis/common/extractge"
-	"github.com/Florennum/rudis/common/help"
-	"github.com/Florennum/rudis/common/mkdir"
-	"github.com/Florennum/rudis/common/patchflatpak"
-	"github.com/Florennum/rudis/common/patchwayland/fvpatchwayland"
-	"github.com/Florennum/rudis/common/patchwayland/vpatchwayland"
-	"github.com/Florennum/rudis/common/setge/grapejuice/fgjsetge"
-	"github.com/Florennum/rudis/common/setge/grapejuice/gjsetge"
-	"github.com/Florennum/rudis/common/setge/vinegar/fvsetge"
-	"github.com/Florennum/rudis/common/setge/vinegar/vsetge"
-	"github.com/Florennum/rudis/common/update"
+	"os"
+	"path/filepath"
 )
 
 func main() {
-	dependcheck.Check()
+
+	dependcheck()
 	vinegar := flag.Bool("vinegar", false, "vinegar")
 	fvinegar := flag.Bool("f-vinegar", false, "flatpak vinegar")
 	grapejuice := flag.Bool("grapejuice", false, "grapejuice")
 	fgrapejuice := flag.Bool("f-grapejuice", false, "flatpak grapejuice")
 
-	// Parse command-line arguments
 	flag.Parse()
 
 	if flag.NArg() < 1 {
@@ -41,11 +29,11 @@ func main() {
 		installGE(*vinegar, *fvinegar, *grapejuice, *fgrapejuice)
 
 	case "update":
-		update.UpdateRudis()
+		update()
 	case "patch-wayland":
 		patchwayland(*vinegar, *fvinegar, *grapejuice, *fgrapejuice)
 	case "help":
-		help.Help()
+		Help()
 	default:
 		fmt.Println("Unknown command, use ./rudis help for help")
 	}
@@ -53,34 +41,58 @@ func main() {
 
 func installGE(vinegar, fvinegar, grapejuice, fgrapejuice bool) {
 	fmt.Println("Installing GE...")
-	mkdir.Mkdir()
-	downloadge.Downloadge()
-	extractge.ExtractGE()
+	mkdir()
+	setupge()
+
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
 
 	if vinegar {
-		vsetge.Set()
+		configFile = filepath.Join(homeDir, ".config", "vinegar", "config.toml")
+		vsetge()
 	}
 	if fvinegar {
-		patchflatpak.Patch()
-		fvsetge.Fset()
+		patchflatpak()
+		configFile = filepath.Join(homeDir, ".var", "app", "io.github.vinegarhq.Vinegar", "config", "vinegar", "config.toml")
+		vsetge()
 	}
 	if grapejuice {
-		gjsetge.Set()
+		gjconfigFile = filepath.Join(homeDir, ".config", "brinkervii", "grapejuice", "user_settings.json")
+		gjsetge()
 	}
 	if fgrapejuice {
-		patchflatpak.Patch()
-		fgjsetge.Set()
+		patchflatpak()
+		gjconfigFile = filepath.Join(homeDir, ".config", "brinkervii", "grapejuice", "user_settings.json")
 	}
 }
 
 func patchwayland(vinegar, fvinegar, grapejuice, fgrapejuice bool) {
 	fmt.Println("ah boy here we go again")
 
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
 	if vinegar {
-		vpatchwayland.UpdateLauncher()
+		configFile = filepath.Join(homeDir, ".config", "vinegar", "config.toml")
+		vpatchwayland()
 	}
 
 	if fvinegar {
-		fvpatchwayland.UpdateLauncher()
+		configFile = filepath.Join(homeDir, ".var", "app", "io.github.vinegarhq.Vinegar", "config", "vinegar", "config.toml")
+		vpatchwayland()
+	}
+
+	if grapejuice {
+		fmt.Println("This action is curreuntly not supported!")
+	}
+
+	if fgrapejuice {
+		fmt.Println("This action is curreuntly not supported!")
 	}
 }
