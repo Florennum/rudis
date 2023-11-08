@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 )
 
@@ -16,14 +17,16 @@ func dependcheck() {
 
 	for _, dep := range dependencies {
 		if !checkDependency(dep) {
-			fmt.Printf("%s is not installed\n", dep)
+			fmt.Printf("%s is not installed!\n", dep)
 			missingCount++
 		}
 	}
 
-	if missingCount > 0 {
+	if missingCount == 1 {
+		fmt.Printf("%d dependency is missing\n", missingCount)
+		os.Exit(1)
+	} else if missingCount > 1 {
 		fmt.Printf("%d dependencies are missing\n", missingCount)
-	} else {
-		fmt.Println("All dependencies are installed")
+		os.Exit(1)
 	}
 }

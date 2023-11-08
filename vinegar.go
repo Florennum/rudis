@@ -39,6 +39,7 @@ func vsetge() error {
 	if err := toml.NewEncoder(file).Encode(config); err != nil {
 		return err
 	}
+	fmt.Println("Successfully updated wineroot!")
 
 	return nil
 }
