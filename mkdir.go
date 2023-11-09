@@ -10,7 +10,8 @@ import (
 func mkdir() {
 	currentUser, err := user.Current()
 	if err != nil {
-		fmt.Println("Error:", err)
+		fmt.Println("Error getting current user:", err)
+		showFailureNotification("Error getting current user: " + err.Error())
 		return
 	}
 
@@ -24,11 +25,12 @@ func mkdir() {
 		if os.IsNotExist(err) {
 			if err := os.MkdirAll(dirPath, os.ModePerm); err != nil {
 				fmt.Println("Error creating directory:", err)
+				showFailureNotification("Error creating directory: " + err.Error())
 				return
 			}
-			fmt.Println("Directory created successfully:", dirPath)
 		} else if err != nil {
 			fmt.Println("Error checking directory:", err)
+			showFailureNotification("Error checking directory: " + err.Error())
 			return
 		}
 	}

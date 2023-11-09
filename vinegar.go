@@ -13,16 +13,19 @@ var configFile string
 func vsetge() error {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
+		showFailureNotification("Error getting user home directory: " + err.Error())
 		return err
 	}
 
 	var config map[string]interface{}
 	if _, err := toml.DecodeFile(configFile, &config); err != nil {
+		showFailureNotification("Error decoding TOML file: " + err.Error())
 		return err
 	}
 
 	tag, err := FetchTag()
 	if err != nil {
+		showFailureNotification("Error fetching tag: " + err.Error())
 		return err
 	}
 
@@ -32,15 +35,17 @@ func vsetge() error {
 
 	file, err := os.Create(configFile)
 	if err != nil {
+		showFailureNotification("Error creating file: " + err.Error())
 		return err
 	}
 	defer file.Close()
 
 	if err := toml.NewEncoder(file).Encode(config); err != nil {
+		showFailureNotification("Error encoding TOML: " + err.Error())
 		return err
 	}
-	fmt.Println("Successfully updated wineroot!")
 
+	showSuccessNotification("Successfully updated wineroot and installed WineGE!")
 	return nil
 }
 
@@ -54,24 +59,28 @@ func vpatchwayland() error {
 	fmt.Print("Type your screen height: ")
 	_, err := fmt.Scan(&height)
 	if err != nil {
+		showFailureNotification("Error scanning screen height: " + err.Error())
 		return err
 	}
 
 	fmt.Print("Type your screen width: ")
 	_, err = fmt.Scan(&width)
 	if err != nil {
+		showFailureNotification("Error scanning screen width: " + err.Error())
 		return err
 	}
 
 	fmt.Print("Type what you want to limit your FPS to (put a big number for unlimited): ")
 	_, err = fmt.Scan(&fps)
 	if err != nil {
+		showFailureNotification("Error scanning FPS limit: " + err.Error())
 		return err
 	}
 
 	fmt.Print("Type what you want your unfocused FPS to be set to: ")
 	_, err = fmt.Scan(&unFocused)
 	if err != nil {
+		showFailureNotification("Error scanning unfocused FPS: " + err.Error())
 		return err
 	}
 
@@ -80,6 +89,7 @@ func vpatchwayland() error {
 
 	var config map[string]interface{}
 	if _, err := toml.DecodeFile(configFile, &config); err != nil {
+		showFailureNotification("Error decoding TOML file: " + err.Error())
 		return err
 	}
 
@@ -94,15 +104,16 @@ func vpatchwayland() error {
 
 	file, err := os.Create(configFile)
 	if err != nil {
+		showFailureNotification("Error creating file: " + err.Error())
 		return err
 	}
 	defer file.Close()
 
 	if err := toml.NewEncoder(file).Encode(config); err != nil {
+		showFailureNotification("Error encoding TOML: " + err.Error())
 		return err
 	}
 
-	fmt.Println("Successfully updated launcher!")
-
+	showSuccessNotification("Successfully updated launcher!")
 	return nil
 }

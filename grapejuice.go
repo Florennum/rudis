@@ -3,23 +3,22 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 )
 
 var gjconfigFile string
 
-func gjsetge() {
+func gjsetge() error {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		fmt.Println("Error:", err)
-		return
+		showFailureNotification("Error getting user home directory: " + err.Error())
+		return err
 	}
 
 	tag, err := FetchTag()
 	if err != nil {
-		fmt.Println("Error:", err)
-		return
+		showFailureNotification("Error fetching tag: " + err.Error())
+		return err
 	}
 
 	defaultWineHome := fmt.Sprintf("%s/.local/share/rudis/winege-ext/lutris-%s-x86_64/", homeDir, tag)
@@ -28,7 +27,8 @@ func gjsetge() {
 	// Read the JSON file
 	fileContent, err := os.ReadFile(gjconfigFile)
 	if err != nil {
-		log.Fatal(err)
+		showFailureNotification("Error reading JSON file: " + err.Error())
+		return err
 	}
 
 	// Create a struct to represent the specific fields to update
@@ -46,7 +46,8 @@ func gjsetge() {
 	var config map[string]interface{}
 	err = json.Unmarshal(fileContent, &config)
 	if err != nil {
-		log.Fatal(err)
+		showFailureNotification("Error unmarshalling JSON: " + err.Error())
+		return err
 	}
 
 	// Update the specific field(s) in the JSON data structure
@@ -56,14 +57,20 @@ func gjsetge() {
 	// Marshal the updated data back to JSON format
 	updatedJSON, err := json.Marshal(config)
 	if err != nil {
-		log.Fatal(err)
+		showFailureNotification("Error marshalling JSON: " + err.Error())
+		return err
 	}
 
 	// Write the updated configuration back to the file
-	err = os.WriteFile(configFile, updatedJSON, 0644)
+	err = os.WriteFile(gjconfigFile, updatedJSON, 0644)
 	if err != nil {
-		log.Fatal(err)
+		showFailureNotification("Error writing JSON file: " + err.Error())
+		return err
 	}
 
-	fmt.Printf("Updated 'default_wine_home' and 'wine_home' in the JSON configuration file: %s\n", configFile)
+	fmt.Printf("Updated 'default_wine_home' and 'wine_home' in the JSON configuration file: " + gjconfigFile)
+	fmt.Printf("\n")
+	fmt.Println("Config update was successful!")
+	showSuccessNotification("Config update was successful!")
+	return nil
 }

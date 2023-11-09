@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-
 	dependcheck()
 	vinegar := flag.Bool("vinegar", false, "vinegar")
 	fvinegar := flag.Bool("f-vinegar", false, "flatpak vinegar")
@@ -26,7 +25,7 @@ func main() {
 
 	switch command {
 	case "install-ge":
-		installGE(*vinegar, *fvinegar, *grapejuice, *fgrapejuice)
+		installWINEGE(*vinegar, *fvinegar, *grapejuice, *fgrapejuice)
 
 	case "update":
 		update()
@@ -39,33 +38,34 @@ func main() {
 	}
 }
 
-func installGE(vinegar, fvinegar, grapejuice, fgrapejuice bool) {
+func installWINEGE(vinegar, fvinegar, grapejuice, fgrapejuice bool) {
 	fmt.Println("Installing GE...")
 	mkdir()
-	setupge()
+	setupwinege()
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		fmt.Println("Error:", err)
+		showFailureNotification("Error installing GE: " + err.Error())
 		return
 	}
 
 	if vinegar {
 		configFile = filepath.Join(homeDir, ".config", "vinegar", "config.toml")
 		vsetge()
-	}
-	if fvinegar {
+	} else if fvinegar {
 		patchflatpak()
 		configFile = filepath.Join(homeDir, ".var", "app", "io.github.vinegarhq.Vinegar", "config", "vinegar", "config.toml")
 		vsetge()
-	}
-	if grapejuice {
+	} else if grapejuice {
 		gjconfigFile = filepath.Join(homeDir, ".config", "brinkervii", "grapejuice", "user_settings.json")
 		gjsetge()
-	}
-	if fgrapejuice {
+	} else if fgrapejuice {
 		patchflatpak()
-		gjconfigFile = filepath.Join(homeDir, ".config", "brinkervii", "grapejuice", "user_settings.json")
+		gjconfigFile = filepath.Join(homeDir, ".var", "app", "net.brinkervii.grapejuice", "config", "brinkervii", "grapejuice", "user_settings.json")
+		gjsetge()
+	} else {
+		showFailureNotification("No installation option selected.")
 	}
 }
 
@@ -75,24 +75,23 @@ func patchwayland(vinegar, fvinegar, grapejuice, fgrapejuice bool) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		fmt.Println("Error:", err)
+		showFailureNotification("Error patching Wayland: " + err.Error())
 		return
 	}
 
 	if vinegar {
 		configFile = filepath.Join(homeDir, ".config", "vinegar", "config.toml")
 		vpatchwayland()
-	}
-
-	if fvinegar {
+		showSuccessNotification("Wayland patching for Vinegar successful!")
+	} else if fvinegar {
 		configFile = filepath.Join(homeDir, ".var", "app", "io.github.vinegarhq.Vinegar", "config", "vinegar", "config.toml")
 		vpatchwayland()
-	}
-
-	if grapejuice {
-		fmt.Println("This action is curreuntly not supported!")
-	}
-
-	if fgrapejuice {
-		fmt.Println("This action is curreuntly not supported!")
+		showSuccessNotification("Wayland patching for Flatpak Vinegar successful!")
+	} else if grapejuice {
+		showFailureNotification("Wayland patching for Grapejuice is currently not supported!")
+	} else if fgrapejuice {
+		showFailureNotification("Wayland patching for Flatpak Grapejuice is currently not supported!")
+	} else {
+		showFailureNotification("No patching option selected.")
 	}
 }

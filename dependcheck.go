@@ -1,3 +1,4 @@
+// dependcheck.go
 package main
 
 import (
@@ -14,19 +15,21 @@ func checkDependency(command string) bool {
 func dependcheck() {
 	dependencies := []string{"axel", "pv", "tar"}
 	missingCount := 0
+	missingDependencies := ""
 
 	for _, dep := range dependencies {
 		if !checkDependency(dep) {
 			fmt.Printf("%s is not installed!\n", dep)
+			missingDependencies += dep + "\n"
 			missingCount++
 		}
 	}
 
 	if missingCount == 1 {
-		fmt.Printf("%d dependency is missing\n", missingCount)
+		showDependencyFailureNotification(fmt.Sprintf("%d dependency is missing:\n%s", missingCount, missingDependencies))
 		os.Exit(1)
 	} else if missingCount > 1 {
-		fmt.Printf("%d dependencies are missing\n", missingCount)
+		showDependencyFailureNotification(fmt.Sprintf("%d dependencies are missing:\n%s", missingCount, missingDependencies))
 		os.Exit(1)
 	}
 }

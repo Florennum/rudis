@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/google/go-github/github"
 )
@@ -34,7 +35,12 @@ func update() error {
 	if latestTag != currentTag {
 		fmt.Printf("Updating rudis to version %s...\n", latestTag)
 
-		projectPath := "./"
+		executablePath, err := os.Executable()
+		if err != nil {
+			return fmt.Errorf("failed to get executable path: %v", err)
+		}
+
+		projectPath := filepath.Dir(executablePath)
 		err = os.Chdir(projectPath)
 		if err != nil {
 			return fmt.Errorf("failed to change working directory: %v", err)
