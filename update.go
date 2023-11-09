@@ -30,7 +30,7 @@ func update() error {
 		return fmt.Errorf("failed to fetch the latest 'rudis' tag: %v", err)
 	}
 
-	currentTag := "v2.0.0-alpha"
+	currentTag := "v2.1.0-alpha-testing"
 
 	if latestTag != currentTag {
 		fmt.Printf("Updating rudis to version %s...\n", latestTag)
